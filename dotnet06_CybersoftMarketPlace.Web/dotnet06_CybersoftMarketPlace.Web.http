@@ -1,0 +1,6 @@
+@dotnet06_CybersoftMarketPlace.Web_HostAddress = http://localhost:5279
+
+GET {{dotnet06_CybersoftMarketPlace.Web_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

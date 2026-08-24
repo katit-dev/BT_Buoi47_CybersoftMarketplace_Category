@@ -1,0 +1,27 @@
+
+<CascadingAuthenticationState>
+
+    <Router AppAssembly="@typeof(App).Assembly">
+        
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData">
+                <NotAuthorized>
+                    <h3>Bạn chưa được phép truy cập vào trang này. Vui lòng đăng nhập!</h3>
+                </NotAuthorized>
+
+            </AuthorizeRouteView>
+        
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+
+        </Found>
+        <NotFound>
+            @* giao diện khi không tìm thấy route tương ứng
+            file .rảzor có @page  => định nghĩa route
+            không có @page  => component bình thường
+         *@
+            <p>Sorry, there's nothing at this address.</p>
+
+        </NotFound>
+
+    </Router>
+</CascadingAuthenticationState>

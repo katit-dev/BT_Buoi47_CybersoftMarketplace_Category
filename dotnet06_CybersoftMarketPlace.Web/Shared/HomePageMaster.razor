@@ -1,0 +1,209 @@
+@using dotnet06_CybersoftMarketPlace.Web.Pages
+@inherits LayoutComponentBase
+@inject NavigationManager _navigationManager
+@inject UserStateService _userStateService
+
+@implements IDisposable
+
+@* ===================== HEADER ===================== *@
+<header class="bg-danger text-white">
+    <div class="container">
+
+        @* Thanh trên cùng *@
+        <div class="d-flex justify-content-between align-items-center py-1 small">
+            <div class="d-flex align-items-center gap-2">
+                <a href="#" class="text-white text-decoration-none">Trang chủ Shopee</a>
+                <span class="vr bg-white opacity-50"></span>
+                <a href="#" class="text-white text-decoration-none">Tải ứng dụng</a>
+                <span class="vr bg-white opacity-50"></span>
+                <span>Kết nối</span>
+                <a href="#" class="text-white"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+                <a href="#" class="text-white text-decoration-none">
+                    <i class="far fa-bell me-1"></i>Thông Báo
+                </a>
+                <a href="#" class="text-white text-decoration-none">
+                    <i class="far fa-question-circle me-1"></i>Hỗ Trợ
+                </a>
+                <div class="dropdown">
+                    <a href="#" class="text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="fas fa-globe me-1"></i>Tiếng Việt
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#">Tiếng Việt</a></li>
+                        <li><a class="dropdown-item" href="#">English</a></li>
+                    </ul>
+                </div>
+                <a href="#" class="text-white text-decoration-none">
+
+                    @if(string.IsNullOrEmpty(_userStateService.accessToken))
+                    {
+                        <i class="fas fa-user-circle me-1"></i>
+                        <a href="/login" class="text-white text-decoration-none">Đăng nhập</a>
+                    }
+                    else
+                    {
+                        <i class="fas fa-user-circle me-1"></i> @_userStateService.accessToken
+                    }
+
+                </a>
+            </div>
+        </div>
+
+        @* Thanh chính: logo + tìm kiếm + giỏ hàng *@
+        <div class="d-flex align-items-center gap-4 py-3">
+            <a href="/" class="text-white text-decoration-none d-flex align-items-center gap-2">
+                <i class="fas fa-shopping-bag fa-2x"></i>
+                <span class="vr bg-white opacity-50"></span>
+                <span class="fs-3 fw-semibold">Shopee Mall</span>
+            </a>
+
+            <form class="flex-grow-1">
+                <div class="bg-white rounded p-1 d-flex">
+                    <input type="text" class="form-control border-0 shadow-none"
+                           placeholder="Tìm trong Shopee Mall" />
+                    <button type="submit" class="btn btn-danger px-4">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+
+            <a href="/cart" class="text-white position-relative me-2">
+                <i class="fas fa-shopping-cart fa-2x"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-white text-danger">
+                    15
+                </span>
+            </a>
+        </div>
+
+    </div>
+</header>
+
+@* ===================== NỘI DUNG TRANG ===================== *@
+<main class="py-4">
+    <div class="container">
+        @Body
+    </div>
+</main>
+
+@* ===================== FOOTER ===================== *@
+<footer class="bg-light border-top">
+    <div class="container pt-5 pb-3">
+        <div class="row g-4">
+
+            <div class="col-6 col-md-4 col-lg">
+                <h6 class="text-uppercase small fw-bold text-secondary">Chăm sóc khách hàng</h6>
+                <ul class="list-unstyled small">
+                    <li><a href="#" class="text-secondary text-decoration-none">Trung Tâm Trợ Giúp</a></li>
+                    <li><a href="#" class="text-secondary text-decoration-none">Shopee Blog</a></li>
+                    <li><a href="#" class="text-secondary text-decoration-none">Shopee Mall</a></li>
+                    <li><a href="#" class="text-secondary text-decoration-none">Hướng Dẫn Mua Hàng</a></li>
+                    <li><a href="#" class="text-secondary text-decoration-none">Hướng Dẫn Bán Hàng</a></li>
+                    <li><a href="#" class="text-secondary text-decoration-none">Trả Hàng &amp; Hoàn Tiền</a></li>
+                </ul>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg">
+                <h6 class="text-uppercase small fw-bold text-secondary">Về Shopee</h6>
+                <ul class="list-unstyled small">
+                    <li><a href="#" class="text-secondary text-decoration-none">Giới Thiệu Về Shopee</a></li>
+                    <li><a href="#" class="text-secondary text-decoration-none">Tuyển Dụng</a></li>
+                    <li><a href="#" class="text-secondary text-decoration-none">Điều Khoản Shopee</a></li>
+                    <li><a href="#" class="text-secondary text-decoration-none">Chính Sách Bảo Mật</a></li>
+                    <li><a href="#" class="text-secondary text-decoration-none">Kênh Người Bán</a></li>
+                    <li><a href="#" class="text-secondary text-decoration-none">Flash Sale</a></li>
+                </ul>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg">
+                <h6 class="text-uppercase small fw-bold text-secondary">Thanh toán</h6>
+                <div class="d-flex flex-wrap gap-2 fs-3 text-secondary">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-jcb"></i>
+                    <i class="fab fa-cc-amex"></i>
+                </div>
+                <h6 class="text-uppercase small fw-bold text-secondary mt-3">Đơn vị vận chuyển</h6>
+                <div class="d-flex flex-wrap gap-1">
+                    <span class="badge bg-white text-secondary border">SPX</span>
+                    <span class="badge bg-white text-secondary border">Viettel Post</span>
+                    <span class="badge bg-white text-secondary border">GHN</span>
+                    <span class="badge bg-white text-secondary border">J&amp;T</span>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-6 col-lg">
+                <h6 class="text-uppercase small fw-bold text-secondary">Theo dõi chúng tôi</h6>
+                <ul class="list-unstyled small">
+                    <li>
+                        <a href="#" class="text-secondary text-decoration-none">
+                            <i class="fab fa-facebook me-2"></i>Facebook
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-secondary text-decoration-none">
+                            <i class="fab fa-instagram me-2"></i>Instagram
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-secondary text-decoration-none">
+                            <i class="fab fa-linkedin me-2"></i>LinkedIn
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-6 col-md-6 col-lg">
+                <h6 class="text-uppercase small fw-bold text-secondary">Tải ứng dụng Shopee</h6>
+                <div class="d-flex gap-3 align-items-start">
+                    <i class="fas fa-qrcode fa-4x text-secondary"></i>
+                    <ul class="list-unstyled small">
+                        <li>
+                            <a href="#" class="text-secondary text-decoration-none">
+                                <i class="fab fa-apple me-2"></i>App Store
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-secondary text-decoration-none">
+                                <i class="fab fa-google-play me-2"></i>Google Play
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="border-top">
+        <div class="container py-3">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center small text-secondary gap-2">
+                <span>© 2026 Shopee. Tất cả các quyền được bảo lưu.</span>
+                <span>Quốc gia &amp; Khu vực: Singapore | Indonesia | Thái Lan | Malaysia | Việt Nam | Philippines</span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+
+        _userStateService.OnChange += StateHasChanged;
+        @* await _userStateService.GetProfileAsync(); *@
+    }
+
+    public void Dispose()
+    {
+         _userStateService.OnChange -= StateHasChanged;
+    }
+
+ 
+}
