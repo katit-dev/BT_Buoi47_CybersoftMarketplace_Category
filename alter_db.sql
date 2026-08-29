@@ -10,4 +10,8 @@ SELECT TOP (1000) [Id]
       ,[Deleted]
       ,[ShopId]
   FROM [CybersoftMarketplace].[dbo].[Categories]
-  WHERE [Name] = 'Gaming Gear'
+  WHERE [ShopId] = 102
+
+  -- Xóa cứng (Hard Delete) category có tên "Gaming Gear"
+DELETE FROM [CybersoftMarketplace].[dbo].[Categories]
+WHERE [Name] = 'string'
