@@ -152,7 +152,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 // builder.Services.AddScoped<ICartService, CartService>();
 // builder.Services.AddScoped<IOrderService, OrderService>();
-
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 //Khai cors cho fe : http://localhost:5279
 builder.Services.AddCors(options =>
