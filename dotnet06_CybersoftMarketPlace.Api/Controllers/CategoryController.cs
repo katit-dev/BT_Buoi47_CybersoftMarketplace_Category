@@ -40,4 +40,29 @@ public class CategoryController : ControllerBase
             response
         );
     }
+
+    /// <summary>
+    /// Create a new category
+    /// </summary>
+    [HttpPost("Create")]
+    [ProducesResponseType(
+        typeof(HTTPResponseData<string>),
+        StatusCodes.Status201Created
+    )]
+    [ProducesResponseType(
+        typeof(HTTPResponseData<string>),
+        StatusCodes.Status400BadRequest
+    )]
+    public async Task<IActionResult> Create(
+        [FromBody] CategoryCreateDTO model
+    )
+    {
+        var response =
+            await _categoryService.CreateCategoryAsync(model);
+
+        return StatusCode(
+            response.statusCode,
+            response
+        );
+    }
 }
