@@ -1,3 +1,5 @@
+using backend_netcore_dotnet06.Helper;
+using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -57,5 +59,87 @@ public class CategoryService : ICategoryService
             statusCode = 200,
             Timestamp = DateTime.Now
         };
+    }
+
+    //create category
+    public async Task<HTTPResponseData<string>> CreateCategoryAsync(
+    CategoryCreateDTO model
+)
+    {
+        try
+        {
+            var categoryRepository =
+                _uniOfWork.CategoryRepository;
+
+            // Kiểm tra trùng Name trong cùng Shop
+            var existingCategory =
+                await categoryRepository.SingleOrDefault(
+                    c =>
+                        c.Name == model.Name &&
+                        c.ShopId == model.ShopId
+                );
+
+            if (existingCategory != null)
+            {
+                return new HTTPResponseData<string>
+                {
+                    DataResponse =
+                        CategoryResponseMessageDTO.CategoryAlreadyExists,
+
+                    Message =
+                        CategoryResponseMessageDTO.CategoryAlreadyExists,
+
+                    statusCode = 400,
+
+                    Timestamp = DateTime.Now
+                };
+            }
+
+            // DTO -> Entity
+            var category = new Category
+            {
+                Name = model.Name,
+
+                ShopId = model.ShopId,
+
+                Alias =
+                    HelperFunction.StringToSlug(model.Name),
+
+                Deleted = false
+            };
+
+            // Thêm vào database thông qua Repository
+            await categoryRepository.AddAsync(category);
+
+            return new HTTPResponseData<string>
+            {
+                DataResponse =
+                    CategoryResponseMessageDTO.CreateSuccess,
+
+                Message =
+                    CategoryResponseMessageDTO.CreateSuccess,
+
+                statusCode = 201,
+
+                Timestamp = DateTime.Now
+            };
+        }
+        catch (Exception)
+        {
+            await _uniOfWork.RollbackTransactionAsync();
+
+            return new HTTPResponseData<string>
+            {
+                DataResponse =
+                    CategoryResponseMessageDTO.CreateFailed,
+
+                Message =
+                    CategoryResponseMessageDTO.CreateFailed,
+
+                statusCode = 400,
+
+                Timestamp = DateTime.Now
+            };
+        }
     }
 }
