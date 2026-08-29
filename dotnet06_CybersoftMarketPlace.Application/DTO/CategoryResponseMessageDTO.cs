@@ -8,4 +8,7 @@ public static class CategoryResponseMessageDTO
 
     public const string CreateFailed =
         "Create category failed";
+
+    public const string ShopNotFound =
+    "Shop not found";
 }
