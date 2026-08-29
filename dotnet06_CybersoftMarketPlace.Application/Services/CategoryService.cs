@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 public interface ICategoryService
 {
     Task<HTTPResponseData<List<CategoryDTO>>> GetAllCategoriesAsync(string keyword = "", int pageIndex = 1, int pageSize = 10);
+    Task<HTTPResponseData<string>> CreateCategoryAsync(CategoryCreateDTO model);
 }
 
 public class CategoryService : ICategoryService
@@ -49,12 +50,12 @@ public class CategoryService : ICategoryService
     .Take(pageSize)
     .ToListAsync();
 
-return new HTTPResponseData<List<CategoryDTO>>
-{
-    DataResponse = categories,
-    Message = "Get categories successfully",
-    statusCode = 200,
-    Timestamp = DateTime.Now
-};
+        return new HTTPResponseData<List<CategoryDTO>>
+        {
+            DataResponse = categories,
+            Message = "Get categories successfully",
+            statusCode = 200,
+            Timestamp = DateTime.Now
+        };
     }
 }
