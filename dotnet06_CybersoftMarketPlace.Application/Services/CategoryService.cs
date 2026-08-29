@@ -66,17 +66,20 @@ public class CategoryService : ICategoryService
     CategoryCreateDTO model
 )
     {
+        bool transactionStarted = false;
+
         try
         {
-            var categoryRepository =
-                _uniOfWork.CategoryRepository;
+            // Lấy CategoryRepository từ UnitOfWork
+            var categoryRepository = _uniOfWork.CategoryRepository;
 
-            // Kiểm tra trùng Name trong cùng Shop
+            // ========================================================
+            // 1. CHECK TRÙNG NAME TRONG CÙNG SHOP
+            // ========================================================
             var existingCategory =
                 await categoryRepository.SingleOrDefault(
-                    c =>
-                        c.Name == model.Name &&
-                        c.ShopId == model.ShopId
+                    c => c.Name == model.Name
+                      && c.ShopId == model.ShopId
                 );
 
             if (existingCategory != null)
@@ -90,26 +93,39 @@ public class CategoryService : ICategoryService
                         CategoryResponseMessageDTO.CategoryAlreadyExists,
 
                     statusCode = 400,
-
                     Timestamp = DateTime.Now
                 };
             }
 
-            // DTO -> Entity
+            // ========================================================
+            // 2. DTO -> ENTITY
+            // ========================================================
             var category = new Category
             {
                 Name = model.Name,
-
                 ShopId = model.ShopId,
 
-                Alias =
-                    HelperFunction.StringToSlug(model.Name),
+                Alias = HelperFunction.StringToSlug(model.Name),
 
                 Deleted = false
             };
 
-            // Thêm vào database thông qua Repository
+            // ========================================================
+            // 3. BẮT ĐẦU TRANSACTION
+            // ========================================================
+            await _uniOfWork.BeginTransactionAsync();
+            transactionStarted = true;
+
+            // ========================================================
+            // 4. ADD CATEGORY
+            // AddAsync của Repository hiện tại đã SaveChangesAsync()
+            // ========================================================
             await categoryRepository.AddAsync(category);
+
+            // ========================================================
+            // 5. COMMIT TRANSACTION
+            // ========================================================
+            await _uniOfWork.CommitTransactionAsync();
 
             return new HTTPResponseData<string>
             {
@@ -120,13 +136,16 @@ public class CategoryService : ICategoryService
                     CategoryResponseMessageDTO.CreateSuccess,
 
                 statusCode = 201,
-
                 Timestamp = DateTime.Now
             };
         }
         catch (Exception)
         {
-            await _uniOfWork.RollbackTransactionAsync();
+            // Chỉ rollback nếu transaction đã được tạo thành công
+            if (transactionStarted)
+            {
+                await _uniOfWork.RollbackTransactionAsync();
+            }
 
             return new HTTPResponseData<string>
             {
@@ -137,7 +156,6 @@ public class CategoryService : ICategoryService
                     CategoryResponseMessageDTO.CreateFailed,
 
                 statusCode = 400,
-
                 Timestamp = DateTime.Now
             };
         }
